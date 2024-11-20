@@ -4,18 +4,6 @@ import Tasks from './components/Tasks';
 
 
 function App() {
-  const initialState = [
-    {
-      id: 1,
-      status: "not completed",
-      task: "learn Dynamic Programming"
-    },
-    {
-      id: 2,
-      status: "not completed",
-      task: "learn Graph data structure"
-    }
-  ];
   const [task, setTask] = useState("");
   const [status, setStatus] = useState(false);
   const [allTasks, setAllTasks] = useState(() => {
