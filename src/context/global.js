@@ -31,20 +31,21 @@ function getInitialState() {
 export const GloablContext = createContext();
 
 function GlobalProvider({ children }) {
-    const [state, dispatch] = useReducer(Reducer, initialState.tasks, getInitialState);
+    const [state, dispatch] = useReducer(Reducer, initialState, getInitialState);
     console.log("state data: " + state.tasks);
     console.log("dispacth function: " + dispatch);
 
     useEffect(() => {
         localStorage.setItem("tasks", JSON.stringify(state.tasks))
-    }, [state])
+        console.log("local storage updated")
+    }, [state.tasks])
 
     const addTodoList = (task) => {
         console.log("in addtodo list function, calling dispatch function");
         dispatch(
             {
                 type: "ADD_TODO_LIST",
-                paload: task
+                payload: task
             }
         );
 
@@ -55,7 +56,9 @@ function GlobalProvider({ children }) {
             addTodoList
 
         }}>
+            console.log("re rendering child componnets as there is a change in state of the componnet");
             {
+
                 children
             }
         </GloablContext.Provider>

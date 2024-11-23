@@ -25,9 +25,11 @@ function AddNewTask() {
             status: status ? 'completed' : 'not completed',
             task: task
         }
+        console.log("task to be added is:\n id:  " + newTask.id + "\n status: " + newTask.status + "\n task: " + newTask.task);
         //console.log("all tasks before updating: " + allTasks);
         console.log("call to addtodolist function shared via context");
-        addTodoList(newTask);
+        if (newTask !== null && newTask.length !== 0)
+            addTodoList(newTask);
         console.log("call to addtodolist is over");
         // console.log("all after updating before updating: " + allTasks);
         setTask("");
