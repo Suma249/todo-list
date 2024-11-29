@@ -5,7 +5,7 @@ import { GloablContext } from '../context/global';
 function AddNewTask() {
     const [task, setTask] = useState("");
     const [status, setStatus] = useState(false);
-    const { addTodoList } = useContext(GloablContext);
+    const { addTask } = useContext(GloablContext);
 
     const onTaskChange = (event) => {
         setTask(event.target.value);
@@ -20,6 +20,10 @@ function AddNewTask() {
 
     const handleAdd = (event) => {
         event.preventDefault();
+        if (task === null || task === "") {
+            window.alert("task is empty, can not add to list");
+            return;
+        }
         const newTask = {
             id: Math.floor(Math.random() * 100000),
             status: status ? 'completed' : 'not completed',
@@ -29,13 +33,13 @@ function AddNewTask() {
         //console.log("all tasks before updating: " + allTasks);
         console.log("call to addtodolist function shared via context");
         if (newTask !== null && newTask.length !== 0)
-            addTodoList(newTask);
+            addTask(newTask);
         console.log("call to addtodolist is over");
         // console.log("all after updating before updating: " + allTasks);
         setTask("");
         setStatus(false);
     }
-
+    console.log("re rendering addNewTask component as there was change in parent's state")
     return (
         <div>
             <form>

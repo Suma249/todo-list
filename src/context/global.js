@@ -40,25 +40,50 @@ function GlobalProvider({ children }) {
         console.log("local storage updated")
     }, [state.tasks])
 
-    const addTodoList = (task) => {
+    useEffect(() => {
+        return () => {
+            console.log("clearing local storage for tasks key");
+            localStorage.removeItem("tasks");
+        }
+    }, [])
+
+    const addTask = (task) => {
         console.log("in addtodo list function, calling dispatch function");
         dispatch(
             {
-                type: "ADD_TODO_LIST",
+                type: "ADD_TASK",
                 payload: task
             }
         );
 
     }
+    function deleteTask(taskId) {
+        console.log("in deleteTask function with task id: " + taskId);
+        dispatch(
+            {
+                type: "DELETE_TASK",
+                payload: taskId
+            }
+        )
+    }
+    const changeTaskStatus = (taskId) => {
+        console.log("inside a changeinliststatus function");
+        console.log("id of the task to change status is: " + taskId);
+        dispatch({
+            type: "CHANGE_TASK_STATUS",
+            payload: taskId
+        })
+    }
     return (
         <GloablContext.Provider value={{
             tasks: state.tasks,
-            addTodoList
+            addTask,
+            changeTaskStatus,
+            deleteTask
 
         }}>
-            console.log("re rendering child componnets as there is a change in state of the componnet");
-            {
 
+            {
                 children
             }
         </GloablContext.Provider>
