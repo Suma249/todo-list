@@ -39,9 +39,9 @@ function AddNewTask() {
         setTask("");
         setStatus(false);
     }
-    console.log("re rendering addNewTask component as there was change in parent's state")
     return (
         <div>
+            <p>Add New Task</p>
             <form>
                 <input type="text" name="task" value={task} onChange={(e) => onTaskChange(e)} />
                 <input type="checkbox" name="completed" checked={status} onChange={(e) => onStatusChange(e)} />

@@ -40,12 +40,12 @@ function GlobalProvider({ children }) {
         console.log("local storage updated")
     }, [state.tasks])
 
-    useEffect(() => {
-        return () => {
-            console.log("clearing local storage for tasks key");
-            localStorage.removeItem("tasks");
-        }
-    }, [])
+    /* useEffect(() => {
+         return () => {
+             console.log("clearing local storage for tasks key");
+             localStorage.removeItem("tasks");
+         }
+     }, []) */
 
     const addTask = (task) => {
         console.log("in addtodo list function, calling dispatch function");
