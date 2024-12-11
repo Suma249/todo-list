@@ -27,7 +27,8 @@ function AddNewTask() {
         const newTask = {
             id: Math.floor(Math.random() * 100000),
             status: status ? 'completed' : 'not completed',
-            task: task
+            task: task,
+            isSelected: false
         }
         console.log("task to be added is:\n id:  " + newTask.id + "\n status: " + newTask.status + "\n task: " + newTask.task);
         //console.log("all tasks before updating: " + allTasks);

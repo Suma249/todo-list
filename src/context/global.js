@@ -6,12 +6,14 @@ const initialState = {
         {
             id: 1,
             status: "not completed",
-            task: "learn Dynamic Programming"
+            task: "learn Dynamic Programming",
+            isSelected: false
         },
         {
             id: 2,
             status: "not completed",
-            task: "learn Graph data structure"
+            task: "learn Graph data structure",
+            isSelected: false
         }
     ]
 };
@@ -45,7 +47,7 @@ function GlobalProvider({ children }) {
              console.log("clearing local storage for tasks key");
              localStorage.removeItem("tasks");
          }
-     }, []) */
+     }, [])*/
 
     const addTask = (task) => {
         console.log("in addtodo list function, calling dispatch function");
@@ -74,12 +76,22 @@ function GlobalProvider({ children }) {
             payload: taskId
         })
     }
+
+    const bulkTaskStatusChange = (task) => {
+        console.log("inside change bul task status function");
+        console.log("task arry is:" + task);
+        dispatch({
+            type: "BULK_TASK_STATUS_CHANGE",
+            payload: task
+        })
+    }
     return (
         <GloablContext.Provider value={{
             tasks: state.tasks,
             addTask,
             changeTaskStatus,
-            deleteTask
+            deleteTask,
+            bulkTaskStatusChange
 
         }}>
 

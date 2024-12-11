@@ -32,11 +32,20 @@ function Reducer(state, action) {
                 ...state,
                 tasks: updatedTasks
             }
-        }
+        };
+
         case "DELETE_TASK": return {
             ...state,
             tasks: state.tasks.filter(task => task.id !== action.payload)
         }
+        // case "BULK_TASK_STATUS_CHANGE": {
+
+        // }
+        //     break
+        case 'TOGGLE_SELECT': {
+
+        }
+            break
         default: return state;
     }
 }
