@@ -3,7 +3,7 @@ import { useContext } from 'react'
 import { GloablContext } from '../context/global'
 
 
-function Task({ task }) {
+function PendingTasks({ task }) {
     const { deleteTask, toggleSelection } = useContext(GloablContext)
     const handleToggle = () => {
         console.log("inside the handletoggle function for the task");
@@ -35,4 +35,4 @@ function Task({ task }) {
     )
 }
 
-export default Task
+export default PendingTasks

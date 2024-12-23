@@ -2,17 +2,20 @@ import React, { useContext } from 'react'
 import { GloablContext } from '../context/global'
 
 function CompletedTasks({ task }) {
-    const { changeTaskStatus, deleteTask } = useContext(GloablContext);
+    const { toggleSelection, deleteTask } = useContext(GloablContext);
+
+    const handleToggle = () => {
+        console.log("inside the handletoggle function for the task");
+        const taskIdArray = [task.id];
+        taskIdArray.forEach(task => console.log(task))
+        toggleSelection(taskIdArray);
+    }
     return (
         <div>
             <li>
                 <input type="checkbox"
-                    checked={true}
-                    onChange={
-                        () => {
-                            if (window.confirm("mark this task as not completed?"))
-                                changeTaskStatus(task.id)
-                        }}
+                    checked={task.isSelected}
+                    onChange={handleToggle}
                 />
                 {task.task}
                 <button

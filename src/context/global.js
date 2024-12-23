@@ -34,12 +34,16 @@ export const GloablContext = createContext();
 
 function GlobalProvider({ children }) {
     const [state, dispatch] = useReducer(Reducer, initialState, getInitialState);
-    console.log("state data: " + state.tasks);
-    console.log("dispacth function: " + dispatch);
+    //console.log("initialsing the state, below is the state data: ");
+    /*state.tasks.forEach(task => {
+        console.log("name: " + task.task + " id: " + task.id + " status: " + task.status + " is it selected: " + task.isSelected);
+    })*/
+    //  console.log("dispacth function: " + dispatch);
 
     useEffect(() => {
         localStorage.setItem("tasks", JSON.stringify(state.tasks))
-        console.log("local storage updated")
+        //console.log("local storage updated ")
+        //state.tasks.forEach(task => console.log("task name: " + task.task + " is selected: " + task.isSelected));
     }, [state.tasks])
 
     /* useEffect(() => {
@@ -47,7 +51,7 @@ function GlobalProvider({ children }) {
              console.log("clearing local storage for tasks key");
              localStorage.removeItem("tasks");
          }
-     }, [])*/
+     }, []) */
 
     const addTask = (task) => {
         console.log("in addtodo list function, calling dispatch function");
@@ -68,21 +72,21 @@ function GlobalProvider({ children }) {
             }
         )
     }
-    const changeTaskStatus = (taskId) => {
-        console.log("inside a changeinliststatus function");
-        console.log("id of the task to change status is: " + taskId);
+    const changeTaskStatus = (taskIds) => {
+        console.log("inside a change task status function");
+        console.log("tasks received, to add to completed list are below");
+        taskIds.forEach(task => console.log("task id: " + task))
         dispatch({
             type: "CHANGE_TASK_STATUS",
-            payload: taskId
+            taskIds: taskIds
         })
     }
-
-    const bulkTaskStatusChange = (task) => {
-        console.log("inside change bul task status function");
-        console.log("task arry is:" + task);
+    const toggleSelection = (taskIds) => {
+        //console.log("toggle selction function is called for toggling of isSelected property for below tasks");
+        //tasks.forEach(task => console.log(task.task + " " + task.status + " " + task.isSelected));
         dispatch({
-            type: "BULK_TASK_STATUS_CHANGE",
-            payload: task
+            type: "TOGGLE_SELECTION",
+            taskIds: taskIds
         })
     }
     return (
@@ -91,8 +95,7 @@ function GlobalProvider({ children }) {
             addTask,
             changeTaskStatus,
             deleteTask,
-            bulkTaskStatusChange
-
+            toggleSelection
         }}>
 
             {
