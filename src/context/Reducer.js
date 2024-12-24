@@ -10,7 +10,7 @@ function Reducer(state, action) {
             console.log("there is no error here with foreach");
             const updatedState = {
                 ...state,
-                tasks: [...state.tasks, { ...action.payload, isSelected: false }]
+                tasks: [...state.tasks, { ...action.payload, isSelected: false, dateAdded: new Date().toISOString().split('T')[0] }]
             }
             console.log("tasks in state after updating");
             console.log("here is an error");
@@ -27,6 +27,7 @@ function Reducer(state, action) {
                     console.log("task name: " + task.task + " task id: " + task.id + " task.status: " + task.status + "is selected: " + task.isSelected);
                     return {
                         ...task,
+                        isSelected: false,
                         status: task.status === 'completed' ? 'not completed' : 'completed'
                     }
                 }

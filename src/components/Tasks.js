@@ -1,35 +1,42 @@
-import React, { useContext, useState, useMemo, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { GloablContext } from '../context/global'
-import CompletedTasks from './CompletedTasks'
-import NotCompletedTasks from './NotCompletedTasks'
-import PendingTasks from './PendingTasks'
+//import CompletedTasks from './CompletedTasks'
+//import NotCompletedTasks from './NotCompletedTasks'
+//import PendingTasks from './PendingTasks'
 import Task from './Task'
+import SearchBar from './SearchBar'
 
 export default function Tasks() {
     const { tasks, toggleSelection, changeTaskStatus } = useContext(GloablContext)
     const [selectAllPending, setSelectAllPending] = useState(false)
+    const [selectAllCompleted, setSelectAllCompleted] = useState(false)
+    const [searchText, setSearchText] = useState("")
+    const [filteredCompletedTasks, setFilteredCompletedTasks] = useState([])
+    const [filteredNotCompletedTasks, setFilteredNotCompletedTasks] = useState([])
+    const completedTasks = tasks.filter(task => task.status === 'completed');
+    const notCompletedTasks = tasks.filter(task => task.status === 'not completed');
 
-    const completedTasks = useMemo(() => {
-        return tasks.filter((task) => task.status === "completed");
-    }, [tasks]);
-
-    const notCompletedTasks = useMemo(() => {
-        return tasks.filter((task) => task.status === "not completed");
-    }, [tasks]);
 
     useEffect(() => {
         const allSelected = notCompletedTasks.every(task => task.isSelected);
         setSelectAllPending(allSelected);
     }, [notCompletedTasks]);
-
     useEffect(() => {
         const allSelected = completedTasks.every(task => task.isSelected);
         setSelectAllCompleted(allSelected);
     }, [completedTasks]);
-
-    const [selectAllCompleted, setSelectAllCompleted] = useState(false)
+    useEffect(() => {
+        if (searchText.trim() === '') {
+            setFilteredCompletedTasks([]);
+            setFilteredNotCompletedTasks([]);
+            return;
+        }
+        const filtered = tasks.filter(task => task.task.toLowerCase().includes(searchText.toLocaleLowerCase()));
+        setFilteredCompletedTasks(filtered.filter(task => task.status === 'completed'));
+        setFilteredNotCompletedTasks(filtered.filter(task => task.status !== 'completed'))
+    }, [searchText])
     //console.log(tasks)
-    console.log("re rendering tasks component as there was change in parent's state")
+    // console.log("re rendering tasks component as there was change in parent's state")
     if (tasks === null || tasks.length === 0)
         return <div>No tasks Available</div>
 
@@ -112,21 +119,24 @@ export default function Tasks() {
     return (
 
         < div >
-            <div className="completedTasks">
-                <input
-                    type="checkbox"
-                    checked={selectAllCompleted}
-                    onChange={() => handleTaskToggle("completedTasks")}
-                />
-                <h3 style={{ display: 'inline' }}>Completed Tasks</h3>
-            </div>
-            <ul>
-                {
-                    completedTasks.map(task => <Task key={task.id} task={task} />)
-                }
-            </ul>
-            <button onClick={handleAddToNotCompletedList}>Add to Not Completed List</button>
-            {/* <div className="pendingTasks">
+            <SearchBar SearchText={(text) => setSearchText(text)} />
+            {searchText === '' ? (
+                <>
+                    <div className="completedTasks">
+                        <input
+                            type="checkbox"
+                            checked={selectAllCompleted}
+                            onChange={() => handleTaskToggle("completedTasks")}
+                        />
+                        <h3 style={{ display: 'inline' }}>Completed Tasks</h3>
+                    </div>
+                    <ul>
+                        {
+                            completedTasks.map(task => <Task key={task.id} task={task} />)
+                        }
+                    </ul>
+                    <button onClick={handleAddToNotCompletedList}>Add to Not Completed List</button>
+                    {/* <div className="pendingTasks">
                 <input
                     type="checkbox"
                 // checked={selectAllPending}
@@ -139,20 +149,49 @@ export default function Tasks() {
                     notCompletedTasks.map(task => <NotCompletedTasks key={task.id} task={task} />)
                 }
             </ul> */}
-            <div className="testingForPendingTasks">
-                <input
-                    type="checkbox"
-                    checked={selectAllPending}
-                    onChange={() => handleTaskToggle("pendingTasks")}
-                />
-                <h3 style={{ display: 'inline' }}>Testing For Pending Tasks</h3>
-            </div>
-            <ul>
-                {
-                    notCompletedTasks.map(task => <PendingTasks key={task.id} task={task} />)
-                }
-            </ul>
-            <button onClick={handleAddToCompletedList}>Add to Completed List</button>
-        </div >
+                    <div className="testingForPendingTasks">
+                        <input
+                            type="checkbox"
+                            checked={selectAllPending}
+                            onChange={() => handleTaskToggle("pendingTasks")}
+                        />
+                        <h3 style={{ display: 'inline' }}>Testing For Pending Tasks</h3>
+                    </div>
+                    <ul>
+                        {
+                            notCompletedTasks.map(task => <Task key={task.id} task={task} />)
+                        }
+                    </ul>
+                    <button onClick={handleAddToCompletedList}>Add to Completed List</button>
+                </>) :
+                (<>
+                    <div>
+                        <h3>Filtered Completed Tasks</h3>
+                        {
+                            filteredCompletedTasks.length > 0 ?
+                                (<ul>
+                                    {filteredCompletedTasks.map(task => <Task key={task.id} task={task} />)}
+                                </ul>
+                                ) :
+                                (<p>no matching completed tasks found</p>)
+                        }
+                    </div>
+                    <div>
+                        <h3>Filtered Not Completed Tasks</h3>
+                        {
+                            filteredNotCompletedTasks.length > 0 ?
+                                (<ul>
+                                    {filteredNotCompletedTasks.map(task => <Task key={task.id} task={task} />)}
+                                </ul>
+                                ) :
+                                (<p>no matching not completed tasks found</p>)
+                        }
+                    </div>
+                </>
+
+                )
+            }
+        </div>
+
     )
 }

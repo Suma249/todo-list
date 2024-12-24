@@ -7,13 +7,15 @@ const initialState = {
             id: 1,
             status: "not completed",
             task: "learn Dynamic Programming",
-            isSelected: false
+            isSelected: false,
+            dateAdded: "2024-11-30"
         },
         {
             id: 2,
             status: "not completed",
             task: "learn Graph data structure",
-            isSelected: false
+            isSelected: false,
+            dateAdded: "2024-12-02"
         }
     ]
 };
@@ -51,7 +53,7 @@ function GlobalProvider({ children }) {
              console.log("clearing local storage for tasks key");
              localStorage.removeItem("tasks");
          }
-     }, []) */
+     }, [])*/
 
     const addTask = (task) => {
         console.log("in addtodo list function, calling dispatch function");
