@@ -13,6 +13,7 @@ export default function Tasks() {
     const [searchText, setSearchText] = useState("")
     const [filteredCompletedTasks, setFilteredCompletedTasks] = useState([])
     const [filteredNotCompletedTasks, setFilteredNotCompletedTasks] = useState([])
+    const [sortBy, setSortBy] = useState("");
     const completedTasks = tasks.filter(task => task.status === 'completed');
     const notCompletedTasks = tasks.filter(task => task.status === 'not completed');
 
@@ -34,7 +35,7 @@ export default function Tasks() {
         const filtered = tasks.filter(task => task.task.toLowerCase().includes(searchText.toLocaleLowerCase()));
         setFilteredCompletedTasks(filtered.filter(task => task.status === 'completed'));
         setFilteredNotCompletedTasks(filtered.filter(task => task.status !== 'completed'))
-    }, [searchText])
+    }, [tasks, searchText])
     //console.log(tasks)
     // console.log("re rendering tasks component as there was change in parent's state")
     if (tasks === null || tasks.length === 0)
@@ -96,8 +97,8 @@ export default function Tasks() {
 
     const handleAddToCompletedList = () => {
         const tasksToBeMarkedAsCompleted = notCompletedTasks.filter(task => task.isSelected === true).map(task => task.id)
-        console.log("tasks to be added to completed list are below");
-        notCompletedTasks.forEach(task => console.log("task name: " + task.task + "task is selcted: " + task.isSelected))
+        // console.log("tasks to be added to completed list are below");
+        // notCompletedTasks.forEach(task => console.log("task name: " + task.task + "task is selcted: " + task.isSelected))
         if (tasksToBeMarkedAsCompleted === null || tasksToBeMarkedAsCompleted.length === 0) {
             alert("please selct the tasks to be added to the completed list")
             return
@@ -107,8 +108,8 @@ export default function Tasks() {
 
     const handleAddToNotCompletedList = () => {
         const tasksToBeMarkedAsCompleted = completedTasks.filter(task => task.isSelected === true).map(task => task.id)
-        console.log("tasks to be added to completed list are below");
-        notCompletedTasks.forEach(task => console.log("task name: " + task.task + "task is selcted: " + task.isSelected))
+        // console.log("tasks to be added to completed list are below");
+        //notCompletedTasks.forEach(task => console.log("task name: " + task.task + "task is selcted: " + task.isSelected))
         if (tasksToBeMarkedAsCompleted === null || tasksToBeMarkedAsCompleted.length === 0) {
             alert("please selct the tasks to be added to the completed list")
             return

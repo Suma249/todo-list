@@ -25,6 +25,11 @@ function getInitialState() {
     try {
         const tasks = savedTasks ? JSON.parse(savedTasks) : initialState.tasks
         return { tasks };
+        /* const updatedTasks = tasks.map(task => ({
+          ...task,
+          dateAdded: task.dateAdded || new Date().toISOString().split('T')[0],
+        }));
+        return { tasks: updatedTasks };*/
     }
     catch (error) {
         console.log("error parsing data: " + error);
@@ -44,8 +49,8 @@ function GlobalProvider({ children }) {
 
     useEffect(() => {
         localStorage.setItem("tasks", JSON.stringify(state.tasks))
-        //console.log("local storage updated ")
-        //state.tasks.forEach(task => console.log("task name: " + task.task + " is selected: " + task.isSelected));
+        console.log("local storage updated ")
+        state.tasks.forEach(task => console.log("task name: " + task.task + " date added: " + task.dateAdded));
     }, [state.tasks])
 
     /* useEffect(() => {

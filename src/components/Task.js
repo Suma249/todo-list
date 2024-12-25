@@ -3,6 +3,7 @@ import { useContext } from 'react'
 import { GloablContext } from '../context/global'
 
 
+
 function Task({ task }) {
     const { deleteTask, toggleSelection } = useContext(GloablContext)
     const handleToggle = () => {
@@ -26,13 +27,17 @@ function Task({ task }) {
                     }
                 />
                 <span>
-                    {task.task}
-                    {task.dateAdded}
+                    <strong>Task:</strong> {task.task} <br />
+                    <strong>Date Added:</strong> {task.dateAdded} <br />
                     <button
-                        onClick={() => { if (window.confirm("are you sure you want to delete this task?")) deleteTask(task.id) }} >
+                        onClick={() => {
+                            if (window.confirm("Are you sure you want to delete this task?")) deleteTask(task.id);
+                        }}
+                    >
                         x
                     </button>
                 </span>
+
             </li>
         </div>
     )
