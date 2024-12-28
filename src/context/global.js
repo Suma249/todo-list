@@ -8,14 +8,14 @@ const initialState = {
             status: "not completed",
             task: "learn Dynamic Programming",
             isSelected: false,
-            dateAdded: "2024-11-30"
+            dateAdded: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
         },
         {
             id: 2,
             status: "not completed",
             task: "learn Graph data structure",
             isSelected: false,
-            dateAdded: "2024-12-02"
+            dateAdded: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
         }
     ]
 };
@@ -24,6 +24,12 @@ function getInitialState() {
     const savedTasks = localStorage.getItem("tasks");
     try {
         const tasks = savedTasks ? JSON.parse(savedTasks) : initialState.tasks
+        for (const task of tasks) {
+            if (!task.dateAdded)
+                task.dateAdded = new Date(Date.now() - 55 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+            if (!task.description)
+                task.description = "testing"
+        }
         return { tasks };
         /* const updatedTasks = tasks.map(task => ({
           ...task,
@@ -53,12 +59,12 @@ function GlobalProvider({ children }) {
         state.tasks.forEach(task => console.log("task name: " + task.task + " date added: " + task.dateAdded));
     }, [state.tasks])
 
-    /* useEffect(() => {
-         return () => {
-             console.log("clearing local storage for tasks key");
-             localStorage.removeItem("tasks");
-         }
-     }, [])*/
+    /*useEffect(() => {
+        return () => {
+            console.log("clearing local storage for tasks key");
+            localStorage.removeItem("tasks");
+        }
+    }, []) */
 
     const addTask = (task) => {
         console.log("in addtodo list function, calling dispatch function");

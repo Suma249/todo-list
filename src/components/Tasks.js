@@ -5,55 +5,54 @@ import { GloablContext } from '../context/global'
 //import PendingTasks from './PendingTasks'
 import Task from './Task'
 import SearchBar from './SearchBar'
+import SortBy from './SortBy'
 
 export default function Tasks() {
     const { tasks, toggleSelection, changeTaskStatus } = useContext(GloablContext)
+
     const [selectAllPending, setSelectAllPending] = useState(false)
     const [selectAllCompleted, setSelectAllCompleted] = useState(false)
-    const [searchText, setSearchText] = useState("")
-    const [filteredCompletedTasks, setFilteredCompletedTasks] = useState([])
-    const [filteredNotCompletedTasks, setFilteredNotCompletedTasks] = useState([])
-    const [sortBy, setSortBy] = useState("");
+
+    const [searchTextCompletedTasks, setSearchTextCompletedTasks] = useState("")
+    const [searchTextPendingTasks, setSearchTextPendingTasks] = useState("")
+
+    const [sortByCompletedTasks, setSortByCompletedTasks] = useState("");
+    const [sortByPendingTasks, setSortByPendingTasks] = useState("");
+
     const completedTasks = tasks.filter(task => task.status === 'completed');
     const notCompletedTasks = tasks.filter(task => task.status === 'not completed');
+    const [filteredCompletedTasks, setFilteredCompletedTasks] = useState(completedTasks)
+    const [filteredNotCompletedTasks, setFilteredNotCompletedTasks] = useState(notCompletedTasks)
 
 
     useEffect(() => {
         const allSelected = notCompletedTasks.every(task => task.isSelected);
         setSelectAllPending(allSelected);
     }, [notCompletedTasks]);
+
     useEffect(() => {
         const allSelected = completedTasks.every(task => task.isSelected);
         setSelectAllCompleted(allSelected);
     }, [completedTasks]);
+
     useEffect(() => {
-        if (searchText.trim() === '') {
-            setFilteredCompletedTasks([]);
-            setFilteredNotCompletedTasks([]);
-            return;
-        }
-        const filtered = tasks.filter(task => task.task.toLowerCase().includes(searchText.toLocaleLowerCase()));
-        setFilteredCompletedTasks(filtered.filter(task => task.status === 'completed'));
-        setFilteredNotCompletedTasks(filtered.filter(task => task.status !== 'completed'))
-    }, [tasks, searchText])
-    //console.log(tasks)
-    // console.log("re rendering tasks component as there was change in parent's state")
+        setFilteredCompletedTasks(
+            completedTasks.filter(task =>
+                task.task.toLowerCase().includes(searchTextCompletedTasks.toLowerCase())
+            )
+        );
+    }, [searchTextCompletedTasks, completedTasks]);
+
+    useEffect(() => {
+        setFilteredNotCompletedTasks(
+            notCompletedTasks.filter(task =>
+                task.task.toLowerCase().includes(searchTextPendingTasks.toLowerCase())
+            )
+        );
+    }, [searchTextPendingTasks, notCompletedTasks]);
+
     if (tasks === null || tasks.length === 0)
         return <div>No tasks Available</div>
-
-    /* const handleTaskSelectionForPendingTasks = () => {
-         if (notCompletedTasks === null || notCompletedTasks.length === 0)
-             return;
-         //console.log("handle task selection for pendind tasks is called")
-         const newSelectAllPending = !selectAllPending
-         setSelectAllPending(newSelectAllPending);
-         // const taskIdsToToggle = notCompletedTasks.map((task) => task.id); // Use IDs
-         const taskIdsToToggle = notCompletedTasks
-             .filter((task) => task.isSelected !== newSelectAllPending)
-             .map((task) => task.id);
- 
-         toggleSelection(taskIdsToToggle);
-     }*/
 
     const handleTaskToggle = type => {
         if (type === "pendingTasks") {
@@ -117,81 +116,50 @@ export default function Tasks() {
         changeTaskStatus(tasksToBeMarkedAsCompleted);
     }
 
+
     return (
 
         < div >
-            <SearchBar SearchText={(text) => setSearchText(text)} />
-            {searchText === '' ? (
-                <>
-                    <div className="completedTasks">
-                        <input
-                            type="checkbox"
-                            checked={selectAllCompleted}
-                            onChange={() => handleTaskToggle("completedTasks")}
-                        />
-                        <h3 style={{ display: 'inline' }}>Completed Tasks</h3>
-                    </div>
-                    <ul>
-                        {
-                            completedTasks.map(task => <Task key={task.id} task={task} />)
-                        }
-                    </ul>
-                    <button onClick={handleAddToNotCompletedList}>Add to Not Completed List</button>
-                    {/* <div className="pendingTasks">
-                <input
-                    type="checkbox"
-                // checked={selectAllPending}
-                //  onChange={handleTaskSelectionForPendingTasks}
-                />
-                <h3 style={{ display: 'inline' }}>Pending Tasks</h3>
-            </div>
-            <ul>
-                {
-                    notCompletedTasks.map(task => <NotCompletedTasks key={task.id} task={task} />)
-                }
-            </ul> */}
-                    <div className="testingForPendingTasks">
-                        <input
-                            type="checkbox"
-                            checked={selectAllPending}
-                            onChange={() => handleTaskToggle("pendingTasks")}
-                        />
-                        <h3 style={{ display: 'inline' }}>Testing For Pending Tasks</h3>
-                    </div>
-                    <ul>
-                        {
-                            notCompletedTasks.map(task => <Task key={task.id} task={task} />)
-                        }
-                    </ul>
-                    <button onClick={handleAddToCompletedList}>Add to Completed List</button>
-                </>) :
-                (<>
-                    <div>
-                        <h3>Filtered Completed Tasks</h3>
-                        {
-                            filteredCompletedTasks.length > 0 ?
-                                (<ul>
-                                    {filteredCompletedTasks.map(task => <Task key={task.id} task={task} />)}
-                                </ul>
-                                ) :
-                                (<p>no matching completed tasks found</p>)
-                        }
-                    </div>
-                    <div>
-                        <h3>Filtered Not Completed Tasks</h3>
-                        {
-                            filteredNotCompletedTasks.length > 0 ?
-                                (<ul>
-                                    {filteredNotCompletedTasks.map(task => <Task key={task.id} task={task} />)}
-                                </ul>
-                                ) :
-                                (<p>no matching not completed tasks found</p>)
-                        }
-                    </div>
-                </>
-
-                )
-            }
+            <>
+                <span>
+                    <SearchBar SearchText={(text) => setSearchTextCompletedTasks(text)} />
+                    <SortBy sortBy={sortByCompletedTasks} setSortBy={setSortByCompletedTasks} />
+                </span>
+                <div className="completedTasks">
+                    <input
+                        type="checkbox"
+                        checked={selectAllCompleted}
+                        onChange={() => handleTaskToggle("completedTasks")}
+                    />
+                    <h3 style={{ display: 'inline' }}>Completed Tasks</h3>
+                </div>
+                <ul>
+                    {
+                        filteredCompletedTasks.map(task => <Task key={task.id} task={task} />)
+                    }
+                </ul>
+                <button onClick={handleAddToNotCompletedList}>Add to Not Completed List</button>
+            </>
+            <>
+                <span>
+                    <SearchBar SearchText={(text) => setSearchTextPendingTasks(text)} />
+                    <SortBy sortBy={sortByPendingTasks} setSortBy={setSortByPendingTasks} />
+                </span>
+                <div className="pendingTasks">
+                    <input
+                        type="checkbox"
+                        checked={selectAllPending}
+                        onChange={() => handleTaskToggle("pendingTasks")}
+                    />
+                    <h3 style={{ display: 'inline' }}>Pending Tasks</h3>
+                </div>
+                <ul>
+                    {
+                        filteredNotCompletedTasks.map(task => <Task key={task.id} task={task} />)
+                    }
+                </ul>
+                <button onClick={handleAddToCompletedList}>Add to Completed List</button>
+            </>
         </div>
 
     )

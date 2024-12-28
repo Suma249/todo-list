@@ -28,7 +28,8 @@ function Task({ task }) {
                 />
                 <span>
                     <strong>Task:</strong> {task.task} <br />
-                    <strong>Date Added:</strong> {task.dateAdded} <br />
+                    <strong>Date Created:</strong> {task.dateAdded} <br />
+                    <strong>Description:</strong> {task.description} <br />
                     <button
                         onClick={() => {
                             if (window.confirm("Are you sure you want to delete this task?")) deleteTask(task.id);
@@ -37,7 +38,6 @@ function Task({ task }) {
                         x
                     </button>
                 </span>
-
             </li>
         </div>
     )
