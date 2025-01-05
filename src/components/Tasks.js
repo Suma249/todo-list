@@ -5,7 +5,9 @@ import { GloablContext } from '../context/global'
 //import PendingTasks from './PendingTasks'
 import Task from './Task'
 import SearchBar from './SearchBar'
-import SortBy from './SortBy'
+import '../css/Tasks.css'
+//import SortBy from './SortBy'
+
 
 export default function Tasks() {
     const { tasks, toggleSelection, changeTaskStatus } = useContext(GloablContext)
@@ -16,11 +18,12 @@ export default function Tasks() {
     const [searchTextCompletedTasks, setSearchTextCompletedTasks] = useState("")
     const [searchTextPendingTasks, setSearchTextPendingTasks] = useState("")
 
-    const [sortByCompletedTasks, setSortByCompletedTasks] = useState("");
-    const [sortByPendingTasks, setSortByPendingTasks] = useState("");
+    // const [sortByCompletedTasks, setSortByCompletedTasks] = useState("");
+    // const [sortByPendingTasks, setSortByPendingTasks] = useState("");
 
     const completedTasks = tasks.filter(task => task.status === 'completed');
     const notCompletedTasks = tasks.filter(task => task.status === 'not completed');
+
     const [filteredCompletedTasks, setFilteredCompletedTasks] = useState(completedTasks)
     const [filteredNotCompletedTasks, setFilteredNotCompletedTasks] = useState(notCompletedTasks)
 
@@ -119,19 +122,18 @@ export default function Tasks() {
 
     return (
 
-        < div >
-            <>
-                <span>
-                    <SearchBar SearchText={(text) => setSearchTextCompletedTasks(text)} />
-                    <SortBy sortBy={sortByCompletedTasks} setSortBy={setSortByCompletedTasks} />
-                </span>
-                <div className="completedTasks">
+        < div className='tasks-container'>
+            <div>
+                <div className="task-section-header">
                     <input
                         type="checkbox"
                         checked={selectAllCompleted}
                         onChange={() => handleTaskToggle("completedTasks")}
                     />
                     <h3 style={{ display: 'inline' }}>Completed Tasks</h3>
+                    <span>
+                        <SearchBar SearchText={(text) => setSearchTextCompletedTasks(text)} />
+                    </span>
                 </div>
                 <ul>
                     {
@@ -139,13 +141,9 @@ export default function Tasks() {
                     }
                 </ul>
                 <button onClick={handleAddToNotCompletedList}>Add to Not Completed List</button>
-            </>
-            <>
-                <span>
-                    <SearchBar SearchText={(text) => setSearchTextPendingTasks(text)} />
-                    <SortBy sortBy={sortByPendingTasks} setSortBy={setSortByPendingTasks} />
-                </span>
-                <div className="pendingTasks">
+            </div>
+            <div>
+                <div className="task-section-header">
                     <input
                         type="checkbox"
                         checked={selectAllPending}
@@ -153,13 +151,16 @@ export default function Tasks() {
                     />
                     <h3 style={{ display: 'inline' }}>Pending Tasks</h3>
                 </div>
+                <span>
+                    <SearchBar SearchText={(text) => setSearchTextPendingTasks(text)} />
+                </span>
                 <ul>
                     {
                         filteredNotCompletedTasks.map(task => <Task key={task.id} task={task} />)
                     }
                 </ul>
                 <button onClick={handleAddToCompletedList}>Add to Completed List</button>
-            </>
+            </div>
         </div>
 
     )

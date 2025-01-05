@@ -22,8 +22,8 @@ function App() {
       <Header />
       <div className='container'>
         <GlobalProvider>
-          <Tasks />
           <AddNewTask />
+          <Tasks />
         </GlobalProvider>
       </div>
     </div>
