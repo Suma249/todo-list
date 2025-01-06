@@ -9,7 +9,7 @@ export default function SearchBar({ SearchText }) {
     return (
         <div>
             <form onSubmit={handleSubmit} >
-                <span>
+                <span >
                     <input type="text" value={text} onChange={(event) => { setText(event.target.value); SearchText(event.target.value) }} placeholder='search text' />
                     <input type='submit' value='search' />
                 </span>

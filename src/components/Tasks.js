@@ -123,44 +123,46 @@ export default function Tasks() {
     return (
 
         < div className='tasks-container'>
-            <div>
+            <section className='task-section'>
                 <div className="task-section-header">
-                    <input
-                        type="checkbox"
-                        checked={selectAllCompleted}
-                        onChange={() => handleTaskToggle("completedTasks")}
-                    />
-                    <h3 style={{ display: 'inline' }}>Completed Tasks</h3>
-                    <span>
-                        <SearchBar SearchText={(text) => setSearchTextCompletedTasks(text)} />
-                    </span>
+                    <div className='header-left'>
+                        <input
+                            type="checkbox"
+                            checked={selectAllCompleted}
+                            onChange={() => handleTaskToggle("completedTasks")}
+                        />
+                        <h3>Completed Tasks</h3>
+                    </div>
+                    <SearchBar SearchText={(text) => setSearchTextCompletedTasks(text)} />
                 </div>
                 <ul>
                     {
                         filteredCompletedTasks.map(task => <Task key={task.id} task={task} />)
                     }
                 </ul>
-                <button onClick={handleAddToNotCompletedList}>Add to Not Completed List</button>
-            </div>
-            <div>
+                <button onClick={handleAddToNotCompletedList}>Add to Pending List</button>
+            </section>
+            <section className='task-section'>
                 <div className="task-section-header">
-                    <input
-                        type="checkbox"
-                        checked={selectAllPending}
-                        onChange={() => handleTaskToggle("pendingTasks")}
-                    />
-                    <h3 style={{ display: 'inline' }}>Pending Tasks</h3>
+                    <div className='header-left'>
+                        <input
+                            type="checkbox"
+                            checked={selectAllPending}
+                            onChange={() => handleTaskToggle("pendingTasks")}
+                        />
+                        <h3 >Pending Tasks</h3>
+                    </div>
+                    <span>
+                        <SearchBar SearchText={(text) => setSearchTextPendingTasks(text)} />
+                    </span>
                 </div>
-                <span>
-                    <SearchBar SearchText={(text) => setSearchTextPendingTasks(text)} />
-                </span>
                 <ul>
                     {
                         filteredNotCompletedTasks.map(task => <Task key={task.id} task={task} />)
                     }
                 </ul>
                 <button onClick={handleAddToCompletedList}>Add to Completed List</button>
-            </div>
+            </section>
         </div>
 
     )
